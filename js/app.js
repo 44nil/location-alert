@@ -465,7 +465,30 @@ class DurakAlarmApp {
 
         this.showToast(`🔔 "${stop.name}" için alarm kuruldu`, 'success');
 
-        // Start demo simulation (since real geolocation may not move)
+        // Start REAL location tracking instead of demo simulation
+        this.alarmManager.setAlarm(stop);
+    }
+
+    startDemoAlarm(stopId) {
+        const stop = getStopById(stopId);
+        if (!stop) return;
+
+        this.map.closePopup();
+
+        // Show alarm card for DEMO
+        this.dom.alarmCard.classList.add('active');
+        this.dom.alarmStopName.textContent = "[DEMO] " + stop.name;
+        this.dom.alarmStopLines.textContent = '📍 ' + stop.city;
+        this.dom.alarmDistanceValue.textContent = 'Demo Başlıyor...';
+        this.dom.alarmDistanceFill.style.width = '0%';
+        this.dom.alarmDot.className = 'alarm-dot';
+        this.dom.alarmStatusText.textContent = 'Simülasyon Aktif';
+
+        this.highlightMarker(stopId);
+        this.showGeofenceCircle(stop, this.alarmManager.settings.distance);
+        this.map.flyTo([stop.lat, stop.lng], 14, { duration: 1 });
+
+        this.showToast(`🚀 Demo Modu: "${stop.name}"`, 'info');
         this.alarmManager.startDemo(stop);
     }
 
@@ -655,7 +678,7 @@ class DurakAlarmApp {
             const pool = favs.length > 0 ? favs : STOPS;
             if (pool.length > 0) {
                 const randomStop = pool[Math.floor(Math.random() * pool.length)];
-                this.setAlarmForStop(randomStop.id);
+                this.startDemoAlarm(randomStop.id);
             } else {
                 this.showToast('⚠️ Demo için önce bir hedef seçin veya favori ekleyin', 'warning');
             }

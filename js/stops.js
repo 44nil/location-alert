@@ -98,7 +98,9 @@ class FavoriteManager {
 
   getAll() {
     const d = localStorage.getItem(this.STORAGE_KEY);
-    return d ? JSON.parse(d) : [];
+    const parsed = d ? JSON.parse(d) : [];
+    // Geriye dönük uyumluluk ve bozuk verileri filtreleme (önceki bug'dan kalan sadece ID olan veriler)
+    return parsed.filter(item => item && typeof item === 'object' && item.id);
   }
 
   add(poiObj) {
