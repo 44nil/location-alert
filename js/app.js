@@ -96,9 +96,10 @@ class DurakAlarmApp {
 
     _addSingleMarker(stop) {
         const icon = L.divIcon({
-            className: 'stop-marker',
-            iconSize: [14, 14],
-            iconAnchor: [7, 7],
+            className: 'stop-marker-container',
+            html: '<div class="stop-marker"></div>',
+            iconSize: [24, 24],
+            iconAnchor: [12, 24],
         });
 
         const marker = L.marker([stop.lat, stop.lng], { icon }).addTo(this.map);
@@ -169,17 +170,20 @@ class DurakAlarmApp {
 
     highlightMarker(stopId) {
         this.markers.forEach(m => {
-            m.getElement()?.classList.remove('active', 'alarm-active');
+            const el = m.getElement()?.querySelector('.stop-marker');
+            if (el) el.classList.remove('active', 'alarm-active');
         });
         const marker = this.markers.find(m => m.stopData.id === stopId);
         if (marker) {
-            marker.getElement()?.classList.add('alarm-active');
+            const el = marker.getElement()?.querySelector('.stop-marker');
+            if (el) el.classList.add('alarm-active');
         }
     }
 
     clearMarkerHighlights() {
         this.markers.forEach(m => {
-            m.getElement()?.classList.remove('active', 'alarm-active');
+            const el = m.getElement()?.querySelector('.stop-marker');
+            if (el) el.classList.remove('active', 'alarm-active');
         });
     }
 
