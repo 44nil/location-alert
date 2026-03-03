@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>DurakAlarm — Otobüs Durağı Alarmı</title>
+  <meta name="description"
+    content="Akıllı geofencing ile otobüs durağınıza yaklaştığınızda sizi uyaran konum tabanlı alarm uygulaması.">
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- App CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <div class="app-container">
+
+    <!-- ═══ Top Navigation ═══ -->
+    <nav class="top-nav">
+      <div class="logo">
+        <div class="logo-icon">🚏</div>
+        <div class="logo-text">Durak<span>Alarm</span></div>
+      </div>
+      <div class="nav-actions">
+        <button class="nav-btn" id="btnLocate" title="Konumuma git">📍</button>
+        <button class="nav-btn" id="btnSettings" title="Ayarlar">⚙️</button>
+      </div>
+    </nav>
+
+    <!-- ═══ Map ═══ -->
+    <div class="map-container">
+      <div id="map"></div>
+      <div id="mapLoadingOverlay" class="map-loading-overlay">
+        <div class="map-loading-spinner"></div>
+        <div class="map-loading-text">Duraklar yükleniyor...</div>
+      </div>
+    </div>
+
+    <!-- ═══ Bottom Sheet ═══ -->
+    <div class="bottom-sheet" id="bottomSheet">
+      <div class="sheet-handle" id="sheetHandle"></div>
+      <div class="sheet-content">
+
+        <!-- City Selector -->
+        <div class="city-selector" id="citySelector">
+          <select id="citySelect" class="city-select">
+            <option value="">🇹🇷 Tüm Türkiye (81 İl)</option>
+          </select>
+        </div>
+
+        <!-- Location Search -->
+        <div class="search-container location-search-container">
+          <span class="search-icon">🔍</span>
+          <input type="text" class="search-bar" id="locationSearchInput"
+            placeholder="Gideceğin yeri ara (Örn: Kızılay, Üniversite...)" autocomplete="off">
+          <div class="search-results" id="locationSearchResults"></div>
+        </div>
+
+
+        <!-- Active Alarm Card -->
+        <div class="alarm-card" id="alarmCard">
+          <div class="alarm-header">
+            <div class="alarm-status">
+              <div class="alarm-dot" id="alarmDot"></div>
+              <span class="alarm-status-text" id="alarmStatusText">Takip Ediliyor</span>
+            </div>
+            <button class="alarm-close" id="alarmClose" title="Alarmı İptal Et">✕</button>
+          </div>
+          <div class="alarm-stop-name" id="alarmStopName">—</div>
+          <div class="alarm-stop-lines" id="alarmStopLines">—</div>
+          <div class="alarm-distance-bar">
+            <div class="alarm-distance-fill" id="alarmDistanceFill"></div>
+          </div>
+          <div class="alarm-distance-info">
+            <div class="alarm-distance-value" id="alarmDistanceValue">—</div>
+            <div class="alarm-accuracy" id="alarmAccuracy">
+              <span class="accuracy-dot low"></span>
+              <span id="alarmAccuracyText">Düşük Hassasiyet</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+          <button class="quick-btn" id="btnDemo">
+            <span class="quick-btn-icon">▶️</span>
+            <span class="quick-btn-label">Demo Başlat</span>
+          </button>
+        </div>
+
+
+        <!-- Favorites -->
+        <div class="section-header">
+          <span class="section-title">⭐ Kayıtlı Hedeflerim</span>
+          <span class="section-badge" id="favCount">0</span>
+        </div>
+        <div class="favorites-list" id="favoritesList">
+          <div class="empty-state" id="emptyFavs">
+            <div class="empty-icon">🌙</div>
+            <div class="empty-text">Henüz kayıtlı bir hedefiniz yok.<br>Haritadan veya arayarak bir yer seçip kaydedin.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══ Settings Modal ═══ -->
+  <div class="modal-overlay" id="settingsModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title">⚙️ Ayarlar</h2>
+        <button class="modal-close" id="settingsClose">✕</button>
+      </div>
+
+      <!-- Alarm Distance -->
+      <div class="setting-group">
+        <label class="setting-label">Alarm Mesafesi</label>
+        <div class="range-container">
+          <div class="range-header">
+            <span class="range-label">🎯 Uyarı mesafesi</span>
+            <span class="range-value" id="distanceValue">400m</span>
+          </div>
+          <input type="range" id="distanceSlider" min="200" max="800" step="50" value="400">
+        </div>
+      </div>
+
+      <!-- Headphone Only -->
+      <div class="setting-group">
+        <label class="setting-label">Kulaklık Ayarları</label>
+        <div class="setting-row">
+          <div class="setting-info">
+            <span class="setting-icon">🎧</span>
+            <div class="setting-text">
+              <h4>Sadece Kulaklıktan Çal</h4>
+              <p>Alarm yalnızca kulaklık takılıyken çalar</p>
+            </div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="headphoneToggle">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Vibration -->
+      <div class="setting-group">
+        <div class="setting-row">
+          <div class="setting-info">
+            <span class="setting-icon">📳</span>
+            <div class="setting-text">
+              <h4>Titreşim</h4>
+              <p>Alarm ile birlikte titreşim gönder</p>
+            </div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="vibrationToggle" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Sound Type -->
+      <div class="setting-group">
+        <label class="setting-label">Alarm Sesi</label>
+        <div class="sound-options">
+          <button class="sound-option active" data-sound="melody">
+            <div class="sound-option-icon">🎵</div>
+            <div class="sound-option-label">Melodi</div>
+          </button>
+          <button class="sound-option" data-sound="beep">
+            <div class="sound-option-icon">🔔</div>
+            <div class="sound-option-label">Bip</div>
+          </button>
+          <button class="sound-option" data-sound="chime">
+            <div class="sound-option-icon">🎶</div>
+            <div class="sound-option-label">Çan</div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ Alarm Triggered Overlay ═══ -->
+  <div class="alarm-overlay" id="alarmOverlay">
+    <div class="alarm-triggered-card">
+      <div class="alarm-ring-icon">🔔</div>
+      <h2 class="alarm-triggered-title">Durağınıza Yaklaştınız!</h2>
+      <p class="alarm-triggered-stop" id="alarmTriggeredStop">—</p>
+      <button class="alarm-dismiss-btn" id="alarmDismiss">Tamam, İndim! 👋</button>
+    </div>
+  </div>
+
+  <!-- ═══ Toast ═══ -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ═══ Scripts ═══ -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/stops.js"></script>
+  <script src="js/alarm.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+
+</html>
