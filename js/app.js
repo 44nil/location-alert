@@ -785,10 +785,9 @@ class DurakAlarmApp {
             const name = item.dataset.name;
 
             if (!isNaN(lat) && !isNaN(lng)) {
-                // Kullanıcı konumunu ayarla ve uç
-                this.setUserMarker(lat, lng);
+                // Sadece hedef pinini düşür (Kullanıcı konumunu bozma)
                 this.map.flyTo([lat, lng], 15, { duration: 1.2 });
-                this.showToast(`📍 Konum ayarlandı: ${name}`, 'success');
+                this.showToast(`📍 Hedef ayarlandı: ${name}`, 'success');
 
                 // Hedef pimi düşür
                 this._setDestinationMarker(lat, lng, name, item.querySelector('.result-lines').textContent.replace('📍 ', ''));
