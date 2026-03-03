@@ -1,40 +1,40 @@
-# KonumAlarm (Location Alert)
+# Location Alert (KonumAlarm)
 
-KonumAlarm, otobüs veya tren yolculuklarınızda hedefinize (durağınıza veya herhangi bir noktaya) yaklaştığınızda sizi uyaran, konum tabanlı (GPS) akıllı bir web uygulaması prototipidir. 
+Location Alert is a smart, GPS-based web application prototype designed to notify you as you approach your destination (a bus/train stop or any custom location) during your journey. 
 
-## 📍 Özellikler
+## 📍 Features
 
-* **Canlı Konum Takibi:** Hedefinize olan mesafenizi anlık olarak harita üzerinde görün ve ilerleme çubuğuyla takip edin.
-* **Akıllı Uyarı Sistemi:** Ayarladığınız mesafeye (örn. 200m - 800m arası) geldiğinizde sesli ve görsel bildirim alın.
-* **Geniş Arama Kapsamı (Nominatim):** Sadece hazır durakları değil, arama çubuğunu kullanarak Türkiye'nin veya dünyanın herhangi bir yerini arayıp hedef olarak belirleyebilirsiniz (Örn: "Kızılay", "Hacettepe Üniversitesi").
-* **Haritadan Hızlı Seçim:** Harita üzerinde herhangi bir noktaya tıklayıp anında orası için alarm başlatabilirsiniz.
-* **Gelişmiş Ayarlar:** 
-  * Alarmın sadece kulaklık takılıyken çalması (Headphone Only modu).
-  * Sessiz veya titreşimli uyarılar.
-  * Farklı alarm sesi seçenekleri (Melodi, Bip, Çan).
-* **Gece Modu Uyumlu Tasarım:** Gece yolculuklarında göz yormayan, premium "Navy and White" arayüz paleti.
-* **Favoriler listesi:** Sık gittiğiniz durakları veya özel konumları yıldızlayıp tek tıkla alarm kurun.
+* **Live Location Tracking:** View your distance to the target in real-time on the map and track your progress via a dynamic progress bar.
+* **Smart Alert System:** Receive both audio and visual notifications when you reach your preset distance threshold (e.g., 200m - 800m).
+* **Broad Search Scope (Nominatim):** You are not limited to predefined stops. Search for any place in Turkey or the world (e.g., "Kızılay", "Hacettepe University") and set it as your destination.
+* **Quick Map Selection:** Tap anywhere on the map to instantly set that coordinate as your destination and start an alarm.
+* **Advanced Settings:** 
+  * "Headphone Only" mode to ensure alarms don't disrupt others.
+  * Silent or vibration-only alerts.
+  * Multiple alert sound options (Melody, Beep, Chime).
+* **Night Mode Optimization:** Features a premium "Navy and White" UI palette designed to reduce eye strain during night travel.
+* **Favorites List:** Bookmark your frequently visited locations or stops to set an alarm with a single click.
 
-## 🛠️ Kullanılan Teknolojiler
+## 🛠️ Technologies Used
 
-* **HTML5, CSS3, Vanilla JavaScript (ES6+)** - Herhangi bir framework'e bağımlı olmadan saf ve hızlı geliştirme.
-* **Leaflet.js:** Harita render işlemleri ve interaktif işaretçiler.
-* **OpenStreetMap (Nominatim API):** Yer arama ve Ters Geocoding (koordinatı adrese çevirme) işlemleri.
-* **Geolocation API:** Tarayıcı üzerinden anlık konum takibi ve Haversine formülü ile mesafe hesaplama.
+* **HTML5, CSS3, Vanilla JavaScript (ES6+)** - Built for pure performance without heavy framework dependencies.
+* **Leaflet.js:** Handles map rendering out-of-the-box with interactive markers.
+* **OpenStreetMap (Nominatim API):** Powers location search and Reverse Geocoding queries.
+* **Geolocation API:** Utilizes the browser's native location services and the Haversine formula for distance calculation.
 
-## 🚀 Hızlı Başlangıç
+## 🚀 Quick Start
 
-Proje tamamen istemci tarafında (client-side) çalışır, herhangi bir derleme aracına (Node.js, Webpack vs.) veya sunucuya ihtiyaç duymaz.
+The project runs entirely on the client-side and does not require any build tools (Node.js, Webpack, etc.) or a backend server.
 
-1. Repoyu bilgisayarınıza indirin veya klonlayın:
+1. Clone or download the repository to your local machine:
    ```bash
    git clone https://github.com/44nil/location-alert.git
    ```
-2. Klasörün içindeki `index.html` dosyasını modern çevrimiçi bir tarayıcıda (Chrome, Safari vs.) açın.
-3. Tarayıcının isteyeceği **"Konum İzri"**ne onay verin.
-4. Haritadan bir yer seçin, arama yapın veya `Demo Başlat` butonu ile uygulamanın nasıl çalıştığını simüle edin!
+2. Open the `index.html` file in any modern web browser.
+3. Allow the "Location Permission" prompt requested by the browser.
+4. Select a location on the map, search for an address, or simply hit the `Demo Başlat` (Start Demo) button to simulate how the app works!
 
-## 📱 Mobil ve Arka Plan Kullanımı
-Proje duyarlı (responsive) olarak tasarlanmıştır ve telefonda bir mobil uygulama hissiyatı verir (Bottom Sheet vb. yapılar içerir). 
+## 📱 Mobile & Background Usage
+The application is fully responsive and provides a native mobile app feel (featuring UI elements like a Bottom Sheet). 
 
-*(Gelecek Geliştirmeler: PWA (Progressive Web App) haline getirilip veya Capacitor/Cordova gibi araçlarla paketlenerek arka planda gerçek (Native) konum takibi yapabilmesi hedeflenmektedir.)*
+*(Future Roadmap: Converting the project to a PWA (Progressive Web App) or bundling it with tools like Capacitor/Cordova to allow for true background location tracking.)*
