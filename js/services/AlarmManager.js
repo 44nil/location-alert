@@ -1,8 +1,8 @@
 // ============================================================
-// alarm.js — Geofencing, Alarm & Kulaklık Algılama
+// AlarmManager.js — Geofencing, Alarm & Kulaklık Algılama
 // ============================================================
 
-class AlarmManager {
+export class AlarmManager {
     constructor() {
         this.activeAlarm = null;
         this.watchId = null;
