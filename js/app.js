@@ -428,9 +428,11 @@ class DurakAlarmApp {
             this.favManager.remove(stopId);
             this.showToast('⭐ Favorilerden çıkarıldı', 'info');
         } else {
-            this.favManager.add(stopId);
             const stop = getStopById(stopId);
-            this.showToast(`⭐ ${stop.name} favorilere eklendi`, 'success');
+            if (stop) {
+                this.favManager.add(stop);
+                this.showToast(`⭐ ${stop.name} favorilere eklendi`, 'success');
+            }
         }
         this.renderFavorites();
         this.updateMarkerPopup(stopId);
@@ -783,7 +785,11 @@ class DurakAlarmApp {
 
     async _searchLocation(query, resultsEl) {
         try {
-            const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=6&countrycodes=tr&accept-language=tr&addressdetails=1`;
+            let searchQuery = query;
+            if (this.selectedCity) {
+                searchQuery = `${query}, ${this.selectedCity}`;
+            }
+            const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(searchQuery)}&format=json&limit=6&countrycodes=tr&accept-language=tr&addressdetails=1`;
             const response = await fetch(url, {
                 headers: { 'User-Agent': 'DurakAlarm/1.0' }
             });
